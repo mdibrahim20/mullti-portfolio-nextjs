@@ -1,0 +1,15 @@
+node_modules
+.next
+.vercel
+
+# Keep environment variables out of version control
+.env
+.env.local
+.env*.local
+
+# Database
+/prisma/dev.db
+/prisma/dev.db-journal
+/prisma/migrations
+
+/generated/prisma
