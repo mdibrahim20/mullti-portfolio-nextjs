@@ -69,6 +69,20 @@ export function DataProvider({ children, fallbackData }: DataProviderProps) {
 
   useEffect(() => {
     fetchData();
+
+    // Refetch data when user returns to the tab (to get latest changes)
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        console.log('Tab is active, refetching data...');
+        fetchData();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

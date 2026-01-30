@@ -37,7 +37,10 @@ function getFallbackData() {
 
 async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
   try {
-    const url = `${API_BASE}${path}`;
+    // Add timestamp to prevent browser caching
+    const timestamp = new Date().getTime();
+    const separator = path.includes('?') ? '&' : '?';
+    const url = `${API_BASE}${path}${separator}_t=${timestamp}`;
     console.log('Fetching from:', url);
     
     const res = await fetch(url, {
@@ -47,6 +50,8 @@ async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
+        "Cache-Control": "no-cache, no-store, must-revalidate",
+        "Pragma": "no-cache",
         ...(init?.headers || {}),
       },
     });
