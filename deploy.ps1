@@ -1,4 +1,8 @@
 # PowerShell Deployment Script for Hostinger
+Write-Host "======================================" -ForegroundColor Cyan
+Write-Host "  Dynamic Portfolio Deployment" -ForegroundColor Cyan
+Write-Host "======================================" -ForegroundColor Cyan
+Write-Host ""
 Write-Host "Starting deployment process..." -ForegroundColor Green
 
 # Clean previous builds
@@ -33,10 +37,19 @@ Set-Location ..
 
 Write-Host "Deployment package created: hostinger-deployment.zip" -ForegroundColor Green
 Write-Host ""
-Write-Host "Upload Instructions:" -ForegroundColor Cyan
+Write-Host "======================================" -ForegroundColor Cyan
+Write-Host "  Upload Instructions:" -ForegroundColor Cyan
+Write-Host "======================================" -ForegroundColor Cyan
 Write-Host "1. Extract hostinger-deployment.zip" -ForegroundColor White
 Write-Host "2. Upload all contents to your Hostinger public_html directory" -ForegroundColor White
 Write-Host "3. Ensure .htaccess file is uploaded and visible" -ForegroundColor White
+Write-Host ""
+Write-Host "======================================" -ForegroundColor Cyan
+Write-Host "  Important: Dynamic Data Fetching" -ForegroundColor Cyan
+Write-Host "======================================" -ForegroundColor Cyan
+Write-Host "✓ Your site now fetches data at runtime" -ForegroundColor Green
+Write-Host "✓ Changes in Laravel appear instantly" -ForegroundColor Green
+Write-Host "✓ No rebuild needed for content updates" -ForegroundColor Green
 Write-Host ""
 Write-Host "Or manually upload the contents of the 'out' folder to public_html" -ForegroundColor White
 Write-Host "Deployment preparation complete!" -ForegroundColor Green

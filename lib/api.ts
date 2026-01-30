@@ -41,15 +41,14 @@ async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
     console.log('Fetching from:', url);
     
     const res = await fetch(url, {
-      // For static export, allow caching during build
+      // Prevent caching to always get fresh data
       ...init,
+      cache: 'no-store',
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
         ...(init?.headers || {}),
       },
-      // Add timeout for static builds
-      next: { revalidate: false },
     });
 
     if (!res.ok) {
