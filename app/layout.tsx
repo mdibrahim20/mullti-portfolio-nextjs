@@ -18,18 +18,32 @@ const jetbrains = JetBrains_Mono({
 });
 
 async function getLayoutData() {
-  try {
-    const res = await fetchSiteData();
-
-    return {
-      siteConfig: res.data.siteConfig || null,
-      navItems: res.data.navItems || [],
-      socialLinks: res.data.socialLinks || [],
-    };
-  } catch (error) {
-    console.error("Error fetching layout data:", error);
-    return { siteConfig: null, navItems: [], socialLinks: [] };
+  // For static export, we'll use fallback data during build
+  // and fetch real data on client-side
+  if (process.env.NODE_ENV === 'development') {
+    try {
+      const res = await fetchSiteData();
+      return {
+        siteConfig: res.data.siteConfig || null,
+        navItems: res.data.navItems || [],
+        socialLinks: res.data.socialLinks || [],
+      };
+    } catch (error) {
+      console.error("Error fetching layout data:", error);
+      return { siteConfig: null, navItems: [], socialLinks: [] };
+    }
   }
+  
+  // Use fallback data for static builds
+  return {
+    siteConfig: {
+      site_name: "My Portfolio",
+      tagline: "Building fast, reliable web products",
+      favicon_url: "/favicon.ico"
+    },
+    navItems: [],
+    socialLinks: []
+  };
 }
 
 
@@ -65,6 +79,36 @@ export async function generateMetadata(): Promise<Metadata> {
 
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  // Get fallback data for static export
+  const fallbackData = {
+    siteConfig: {
+      site_name: "My Portfolio",
+      tagline: "Building fast, reliable web products",
+      favicon_url: "/favicon.ico"
+    },
+    portfolioSettings: {
+      active_version: "v2",
+      theme_mode: "dark",
+      allow_theme_toggle: true
+    },
+    navItems: [],
+    socialLinks: [],
+    sections: {
+      hero: [],
+      about: [],
+      projects: [],
+      skills: [],
+      experience: [],
+      contact: [],
+      footer: []
+    },
+    projects: [],
+    experiences: [],
+    skills: { categories: [], radars: [] },
+    highlights: [],
+    principles: []
+  };
+
   return (
     <html lang="en" suppressHydrationWarning className={`${inter.variable} ${jetbrains.variable}`}>
       {/*
@@ -72,7 +116,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         Each portfolio version owns its own layout/shell so Laravel can swap versions freely.
       */}
       <body className="antialiased">
-        <Providers>{children}</Providers>
+        <Providers fallbackData={fallbackData}>{children}</Providers>
       </body>
     </html>
   );

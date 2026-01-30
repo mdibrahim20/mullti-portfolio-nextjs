@@ -1,5 +1,6 @@
-const API_BASE =
-  (process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000").replace(/\/$/, "");
+const API_BASE = process.env.NEXT_PUBLIC_API_URL 
+  ? process.env.NEXT_PUBLIC_API_URL.replace(/\/$/, "")
+  : "https://api.ibrahimlogs.me";
 
 // Fallback data for when API is not available
 function getFallbackData() {
@@ -36,14 +37,19 @@ function getFallbackData() {
 
 async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
   try {
-    const res = await fetch(`${API_BASE}${path}`, {
+    const url = `${API_BASE}${path}`;
+    console.log('Fetching from:', url);
+    
+    const res = await fetch(url, {
       // For static export, allow caching during build
       ...init,
       headers: {
-         Accept: "application/json",
-      "Content-Type": "application/json",
-      ...(init?.headers || {}),
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        ...(init?.headers || {}),
       },
+      // Add timeout for static builds
+      next: { revalidate: false },
     });
 
     if (!res.ok) {

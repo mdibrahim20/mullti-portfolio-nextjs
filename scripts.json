@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "deploy": "npm run build && echo 'Build completed! Upload the out/ folder to your Hostinger public_html directory.'",
+    "test-api": "node -e \"console.log('Testing API connection...'); fetch('https://api.ibrahimlogs.me/api/public/site-data').then(r=>r.json()).then(console.log).catch(console.error)\""
+  }
+}

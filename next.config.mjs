@@ -2,6 +2,9 @@
 const nextConfig = {
   output: 'export',
   reactStrictMode: true,
+  env: {
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'https://api.ibrahimlogs.me',
+  },
   images: {
     unoptimized: true, // Required for static export
     remotePatterns: [

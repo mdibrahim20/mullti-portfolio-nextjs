@@ -2,13 +2,23 @@
 
 import { ThemeProvider } from "next-themes";
 import { MotionConfig, useReducedMotion } from "framer-motion";
+import { DataProvider } from "./DataProvider";
 
-export function Providers({ children }: { children: React.ReactNode }) {
+interface ProvidersProps {
+  children: React.ReactNode;
+  fallbackData?: any;
+}
+
+export function Providers({ children, fallbackData }: ProvidersProps) {
   const reduced = useReducedMotion();
 
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-      <MotionConfig reducedMotion={reduced ? "always" : "user"}>{children}</MotionConfig>
+      <MotionConfig reducedMotion={reduced ? "always" : "user"}>
+        <DataProvider fallbackData={fallbackData}>
+          {children}
+        </DataProvider>
+      </MotionConfig>
     </ThemeProvider>
   );
 }
