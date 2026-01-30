@@ -1,19 +1,27 @@
-# Enable HTTPS redirect
-RewriteEngine On
-RewriteCond %{HTTPS} off
-RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# Enable HTTPS redirect (optional - comment out if not needed)
+# RewriteEngine On
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 # Handle client-side routing for Next.js static export
-RewriteEngine On
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
 
-# Handle static assets
-RewriteCond %{REQUEST_URI} ^/(_next/|favicon\.ico|robots\.txt|sitemap\.xml)
-RewriteRule ^.*$ - [L]
+    # Don't rewrite files or directories that exist
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
 
-# Handle API routes and other paths
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule . /index.html [L]
+    # Don't rewrite _next static files
+    RewriteRule ^_next/.* - [L]
+
+    # Don't rewrite common files
+    RewriteRule ^(robots\.txt|sitemap\.xml|favicon\.ico|.*\.(css|js|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot))$ - [L]
+
+    # Rewrite everything else to index.html for client-side routing
+    RewriteRule ^ index.html [L]
+</IfModule>
 
 # Set proper MIME types
 <IfModule mod_mime.c>
